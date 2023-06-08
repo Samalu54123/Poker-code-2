@@ -1,0 +1,6 @@
+lop, 100
+samuel, 140
+damian, 90
+test, 100
+jamie, 100
+muamuel, 100
