@@ -16,6 +16,7 @@ public class PokerUI extends javax.swing.JFrame {
     int bal;
     String deposit;
     String withraw;
+    int counter = 0;
     /**
      * Creates new form PokerUI
      */
@@ -321,14 +322,14 @@ public class PokerUI extends javax.swing.JFrame {
     {
         Play2.setVisible(false);
         deckNum.setVisible(false);
+        tCard1.setVisible(false);
+        tCard2.setVisible(false);
+        tCard3.setVisible(false);
+        tCard4.setVisible(false);
+        tCard5.setVisible(false);
         
         pCard1.setVisible(true);
         pCard2.setVisible(true);
-        tCard1.setVisible(true);
-        tCard2.setVisible(true);
-        tCard3.setVisible(true);
-        tCard4.setVisible(true);
-        tCard5.setVisible(true);
         jScrollPane.setVisible(true);
         jScrollPane2.setVisible(true);
         jScrollPane3.setVisible(true);
@@ -364,7 +365,7 @@ public class PokerUI extends javax.swing.JFrame {
         Check.setLabel("Check/Match");
         Check.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                //CheckActionPerformed(evt);
+                CheckActionPerformed(evt);
             }
         });
 
@@ -757,6 +758,185 @@ public class PokerUI extends javax.swing.JFrame {
                 .addComponent(Withraw, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(95, Short.MAX_VALUE))
         );
+    }
+    
+    private void CheckActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        Play2.setVisible(false);
+        deckNum.setVisible(false);
+        tCard1.setVisible(false);
+        tCard2.setVisible(false);
+        tCard3.setVisible(false);
+        tCard4.setVisible(false);
+        tCard5.setVisible(false);
+        
+        pCard1.setVisible(true);
+        pCard2.setVisible(true);
+        jScrollPane.setVisible(true);
+        jScrollPane2.setVisible(true);
+        jScrollPane3.setVisible(true);
+        jScrollPane4.setVisible(true);
+        jScrollPane5.setVisible(true);
+        jScrollPane6.setVisible(true);
+        jScrollPane7.setVisible(true);
+        
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        Title.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+        Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Title.setText("Poker Game");
+        Title.setAlignmentY(0.0F);
+
+        Label1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Label1.setText("Current Pot: ");
+
+        Bet.setLabel("Bet");
+        Bet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                //BetActionPerformed(evt);
+            }
+        });
+
+        Fold.setText("Fold");
+        Fold.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                //FoldActionPerformed(evt);
+            }
+        });
+
+        Check.setLabel("Check/Match");
+
+        pCard2.setEditable(false);
+        pCard2.setText("PCard2");
+        jScrollPane2.setViewportView(pCard2);
+
+        pCard1.setEditable(false);
+        pCard1.setText("PCard1");
+        jScrollPane3.setViewportView(pCard1);
+
+        tCard4.setEditable(false);
+        tCard4.setText("TCard4");
+        jScrollPane.setViewportView(tCard4);
+
+        tCard5.setEditable(false);
+        tCard5.setText("TCard5");
+        jScrollPane4.setViewportView(tCard5);
+
+        tCard3.setEditable(false);
+        tCard3.setText("TCard3");
+        jScrollPane5.setViewportView(tCard3);
+
+        tCard2.setEditable(false);
+        tCard2.setText("TCard2");
+        jScrollPane6.setViewportView(tCard2);
+
+        tCard1.setEditable(false);
+        tCard1.setText("TCard1");
+        jScrollPane7.setViewportView(tCard1);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(Check, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Bet, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Fold, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(103, 103, 103)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(78, 78, 78)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addComponent(Label1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Bet, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Check, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Fold, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        pack();
+        counter++;
+        if(counter==1)
+        {
+            tCard1.setVisible(true);
+            tCard2.setVisible(true);
+            tCard3.setVisible(true);
+            
+        }
+        else if(counter==2)
+        {
+            tCard1.setVisible(true);
+            tCard2.setVisible(true);
+            tCard3.setVisible(true);
+            tCard4.setVisible(true);
+            
+        }
+        else if(counter==3)
+        {
+            tCard1.setVisible(true);
+            tCard2.setVisible(true);
+            tCard3.setVisible(true);
+            tCard4.setVisible(true);
+            tCard5.setVisible(true);
+            
+        }
+        else if(counter==4)
+        {
+            counter = 0;
+            tCard1.setVisible(true);
+            tCard2.setVisible(true);
+            tCard3.setVisible(true);
+            tCard4.setVisible(true);
+            tCard5.setVisible(true);
+            
+        }
     }
     
     
