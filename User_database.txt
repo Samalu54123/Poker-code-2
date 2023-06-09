@@ -1,6 +1,11 @@
 lop, 100
-samuel, 140
+samuel, 95
 damian, 90
 test, 100
 jamie, 100
 muamuel, 100
+username, 97
+erfd, 0
+pokernew, 0
+msajfladfdsg, 0
+yufhlgjbs, 25
