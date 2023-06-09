@@ -14,9 +14,22 @@ import javax.swing.JButton;
 public class PokerUI extends javax.swing.JFrame {
     String username;
     int bal;
+    int bet;
     String deposit;
     String withraw;
-    int counter = 0;
+    int counter;
+    User user = new User(null);
+    Bank bank = new Bank(null);
+    CheckWinner checkWin = new CheckWinner();
+    Table table;
+    Card cpCard1;
+    Card cpCard2;
+    Card ctCard1;
+    Card ctCard2;
+    Card ctCard3;
+    Card ctCard4;
+    Card ctCard5;
+            
     /**
      * Creates new form PokerUI
      */
@@ -50,6 +63,7 @@ public class PokerUI extends javax.swing.JFrame {
         Play2 = new javax.swing.JButton();
         Withraw2 = new javax.swing.JButton();        
         Bet = new javax.swing.JButton();
+        Bet2 = new javax.swing.JButton();
         Fold = new javax.swing.JButton();
         Check = new javax.swing.JButton();
         pCard2 = new javax.swing.JTextPane();
@@ -112,9 +126,9 @@ public class PokerUI extends javax.swing.JFrame {
         Label1.setText("Please enter username:");
 
         doneButton.setText("Done");
-        doneButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                doneButtonMouseClicked(evt);
+        doneButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                doneButtonActionPerformed(evt);
             }
         });
 
@@ -155,7 +169,7 @@ public class PokerUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>
 
-    private void doneButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_doneButtonMouseClicked
+    private void doneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doneButtonMouseClicked
         jPanel1.setVisible(false);
         jPanel2.setVisible(false);
         jPanel3.setVisible(false);
@@ -163,13 +177,43 @@ public class PokerUI extends javax.swing.JFrame {
         doneButton.setVisible(false);
         Deposit2.setVisible(false);
         depositAmount.setVisible(false);
+        Play2.setVisible(false);
+        deckNum.setVisible(false);
+        tCard1.setVisible(false);
+        tCard2.setVisible(false);
+        tCard3.setVisible(false);
+        tCard4.setVisible(false);
+        tCard5.setVisible(false);
+        pCard1.setVisible(false);
+        pCard2.setVisible(false);
+        Check.setVisible(false);
+        Bet.setVisible(false);
+        Fold.setVisible(false);
+        jScrollPane.setVisible(false);
+        jScrollPane2.setVisible(false);
+        jScrollPane3.setVisible(false);
+        jScrollPane4.setVisible(false);
+        jScrollPane5.setVisible(false);
+        jScrollPane6.setVisible(false);
+        jScrollPane7.setVisible(false);
         
         Title.setVisible(true);
         Label1.setVisible(true);
         Play.setVisible(true);
         Deposit.setVisible(true);
         Withraw.setVisible(true);
+        
         username = TextField1.getText();
+        
+        if(user.searchUserName(username)!= null) 
+        {
+            user.userName = username;
+        }
+        else
+        {
+            user.setUserName(username);
+            bank.setBalance(user, 0);
+        }
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -178,7 +222,7 @@ public class PokerUI extends javax.swing.JFrame {
         Title.setText("Poker Game");
         Title.setAlignmentY(0.0F);
 
-        Label1.setText("Hello: "+username);
+        Label1.setText("Hello: "+username+" Balance: "+bank.getBalance(user));
 
         Deposit.setText("Deposit");
         Deposit.addActionListener(new java.awt.event.ActionListener() {
@@ -235,7 +279,18 @@ public class PokerUI extends javax.swing.JFrame {
                 .addComponent(Withraw, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(95, Short.MAX_VALUE))
         );
+        pack();
     }//GEN-LAST:event_doneButtonMouseClicked
+
+    public int getCounter() 
+    {
+        return counter;
+    }
+
+    public void setCounter(int counter)
+    {
+        this.counter = counter;
+    }
 
     private void PlayActionPerformed(java.awt.event.ActionEvent evt) 
     {
@@ -259,7 +314,8 @@ public class PokerUI extends javax.swing.JFrame {
         Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Title.setText("Poker Game");
         Title.setAlignmentY(0.0F);
-
+        
+        
         Label1.setText("Enter Number of decks");
 
         Deposit.setText("Deposit");
@@ -320,6 +376,8 @@ public class PokerUI extends javax.swing.JFrame {
     
     private void Play2ActionPerformed(java.awt.event.ActionEvent evt)
     {
+        int deck = Integer.parseInt(deckNum.getText());
+        table = new Table(deck, user, bank);
         Play2.setVisible(false);
         deckNum.setVisible(false);
         tCard1.setVisible(false);
@@ -337,6 +395,9 @@ public class PokerUI extends javax.swing.JFrame {
         jScrollPane5.setVisible(true);
         jScrollPane6.setVisible(true);
         jScrollPane7.setVisible(true);
+        Check.setVisible(true);
+        Bet.setVisible(true);
+        Fold.setVisible(true);
         
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -346,19 +407,21 @@ public class PokerUI extends javax.swing.JFrame {
         Title.setAlignmentY(0.0F);
 
         Label1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Label1.setText("Current Pot: ");
+        Label1.setText("Current Pot: "+table.getPot());
 
+        table.shuffle(table);
+        
         Bet.setLabel("Bet");
         Bet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                //BetActionPerformed(evt);
+                BetActionPerformed(evt);
             }
         });
 
         Fold.setText("Fold");
         Fold.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                //FoldActionPerformed(evt);
+                FoldActionPerformed(evt);
             }
         });
 
@@ -370,31 +433,38 @@ public class PokerUI extends javax.swing.JFrame {
         });
 
         pCard2.setEditable(false);
-        pCard2.setText("PCard2");
+        cpCard2 = table.dealCard();
+        pCard2.setText(cpCard2.card);
         jScrollPane2.setViewportView(pCard2);
 
         pCard1.setEditable(false);
-        pCard1.setText("PCard1");
+        cpCard1 = table.dealCard();
+        pCard1.setText(cpCard1.card);
         jScrollPane3.setViewportView(pCard1);
 
         tCard4.setEditable(false);
-        tCard4.setText("TCard4");
+        ctCard4 = table.dealCard();
+        tCard4.setText(ctCard4.card);
         jScrollPane.setViewportView(tCard4);
 
         tCard5.setEditable(false);
-        tCard5.setText("TCard5");
+        ctCard5 = table.dealCard();
+        tCard5.setText(ctCard5.card);
         jScrollPane4.setViewportView(tCard5);
 
         tCard3.setEditable(false);
-        tCard3.setText("TCard3");
+        ctCard3 = table.dealCard();
+        tCard3.setText(ctCard3.card);
         jScrollPane5.setViewportView(tCard3);
 
         tCard2.setEditable(false);
-        tCard2.setText("TCard2");
+        ctCard2 = table.dealCard();
+        tCard2.setText(ctCard2.card);
         jScrollPane6.setViewportView(tCard2);
 
         tCard1.setEditable(false);
-        tCard1.setText("TCard1");
+        ctCard1 = table.dealCard();
+        tCard1.setText(ctCard1.card);
         jScrollPane7.setViewportView(tCard1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -463,87 +533,12 @@ public class PokerUI extends javax.swing.JFrame {
                     .addComponent(Check, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Fold, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
-
         pack();
-    }
-    
-    private void Deposit2ActionPerformed(java.awt.event.ActionEvent evt)
-    {
-        jPanel1.setVisible(false);
-        jPanel2.setVisible(false);
-        jPanel3.setVisible(false);
-        TextField1.setVisible(false);
-        doneButton.setVisible(false);
-        Deposit2.setVisible(false);
-        depositAmount.setVisible(false);
-        
-        Title.setVisible(true);
-        Label1.setVisible(true);
-        Play.setVisible(true);
-        Deposit.setVisible(true);
-        Withraw.setVisible(true);
-        
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        Title.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
-        Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Title.setText("Poker Game");
-        Title.setAlignmentY(0.0F);
-
-        Label1.setText("Hello: "+username);
-        
-        deposit = depositAmount.getText();
-        Deposit.setText("Deposit");
-        Deposit.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-               DepositActionPerformed(evt);
-            }
-        });
-        Withraw.setText("Withraw");
-
-        Play.setText("Play");
-        Play.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PlayActionPerformed(evt);
-            }});
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
-                        .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(130, 130, 130)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(Label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Deposit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Withraw, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Play, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(48, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Label1)
-                .addGap(53, 53, 53)
-                .addComponent(Play, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Deposit, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Withraw, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(95, Short.MAX_VALUE))
-        );
     }
     
     private void DepositActionPerformed(java.awt.event.ActionEvent evt) 
     {
+        counter = 0;
         Play.setVisible(false);
         Withraw.setVisible(false);
         deckNum.setVisible(false);
@@ -610,13 +605,91 @@ public class PokerUI extends javax.swing.JFrame {
                 .addComponent(Deposit2, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(194, Short.MAX_VALUE))
         );
-
         pack();
+    }
+    
+    private void Deposit2ActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        jPanel1.setVisible(false);
+        jPanel2.setVisible(false);
+        jPanel3.setVisible(false);
+        TextField1.setVisible(false);
+        doneButton.setVisible(false);
+        Deposit2.setVisible(false);
+        depositAmount.setVisible(false);
+        Withraw2.setVisible(false);
+        
+        Title.setVisible(true);
+        Label1.setVisible(true);
+        Play.setVisible(true);
+        Deposit.setVisible(true);
+        Withraw.setVisible(true);
+        
+        username = TextField1.getText();
+        
+        if(user.searchUserName(username)!= null) 
+        {
+            user.userName = username;
+        }
+        else
+        {
+            user.setUserName(username);
+            bank.setBalance(user, 0);
+        }
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        Title.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+        Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Title.setText("Poker Game");
+        Title.setAlignmentY(0.0F);
+
+        Deposit.setText("Deposit");
+        
+        Withraw.setText("Withraw");
+        
+        deposit = depositAmount.getText();
+        bank.deposit(user, Integer.parseInt(deposit));
+        Label1.setText("Hello: "+username+" Balance: "+bank.getBalance(user));
+        
+        Play.setText("Play");
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(130, 130, 130)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Deposit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Withraw, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Play, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(48, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Label1)
+                .addGap(53, 53, 53)
+                .addComponent(Play, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Deposit, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Withraw, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(95, Short.MAX_VALUE))
+        );
     }
     
     private void WithrawActionPerformed(java.awt.event.ActionEvent evt)
     {
-        
         Play.setVisible(false);
         Withraw.setVisible(false);
         deckNum.setVisible(false);
@@ -627,6 +700,7 @@ public class PokerUI extends javax.swing.JFrame {
         doneButton.setVisible(false);
         
         depositAmount.setVisible(true);
+        Withraw2.setVisible(true);
         
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -636,7 +710,7 @@ public class PokerUI extends javax.swing.JFrame {
         Title.setAlignmentY(0.0F);
 
         Label1.setText("Current Balance:");
-
+        
         Withraw2.setText("Withraw");
         Withraw2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -700,6 +774,17 @@ public class PokerUI extends javax.swing.JFrame {
         Deposit.setVisible(true);
         Withraw.setVisible(true);
         
+        username = TextField1.getText();
+        
+        if(user.searchUserName(username)!= null) 
+        {
+            user.userName = username;
+        }
+        else
+        {
+            user.setUserName(username);
+            bank.setBalance(user, 0);
+        }
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -708,23 +793,15 @@ public class PokerUI extends javax.swing.JFrame {
         Title.setText("Poker Game");
         Title.setAlignmentY(0.0F);
 
-        Label1.setText("Hello: "+username);
-        
-        withraw = depositAmount.getText();
         Deposit.setText("Deposit");
-        Deposit.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-               DepositActionPerformed(evt);
-            }
-        });
+        
         Withraw.setText("Withraw");
-
+        withraw = depositAmount.getText();
+        bank.withraw(user, Integer.parseInt(withraw));
+        
+        Label1.setText("Hello: "+username+" Balance: "+bank.getBalance(user));
+        
         Play.setText("Play");
-        Play.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PlayActionPerformed(evt);
-            }});
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -760,7 +837,7 @@ public class PokerUI extends javax.swing.JFrame {
         );
     }
     
-    private void CheckActionPerformed(java.awt.event.ActionEvent evt)
+    public void CheckActionPerformed(java.awt.event.ActionEvent evt)
     {
         Play2.setVisible(false);
         deckNum.setVisible(false);
@@ -769,6 +846,8 @@ public class PokerUI extends javax.swing.JFrame {
         tCard3.setVisible(false);
         tCard4.setVisible(false);
         tCard5.setVisible(false);
+        Bet2.setVisible(false);
+        TextField1.setVisible(false);
         
         pCard1.setVisible(true);
         pCard2.setVisible(true);
@@ -779,6 +858,12 @@ public class PokerUI extends javax.swing.JFrame {
         jScrollPane5.setVisible(true);
         jScrollPane6.setVisible(true);
         jScrollPane7.setVisible(true);
+        Bet.setVisible(true);
+        
+        
+        Check.setEnabled(true);
+        Fold.setEnabled(true);
+        
         
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -788,8 +873,10 @@ public class PokerUI extends javax.swing.JFrame {
         Title.setAlignmentY(0.0F);
 
         Label1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Label1.setText("Current Pot: ");
+        Label1.setText("Current Pot: "+table.getPot());
 
+        table.shuffle(table);
+        
         Bet.setLabel("Bet");
         Bet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -807,31 +894,24 @@ public class PokerUI extends javax.swing.JFrame {
         Check.setLabel("Check/Match");
 
         pCard2.setEditable(false);
-        pCard2.setText("PCard2");
         jScrollPane2.setViewportView(pCard2);
 
         pCard1.setEditable(false);
-        pCard1.setText("PCard1");
         jScrollPane3.setViewportView(pCard1);
 
         tCard4.setEditable(false);
-        tCard4.setText("TCard4");
         jScrollPane.setViewportView(tCard4);
 
         tCard5.setEditable(false);
-        tCard5.setText("TCard5");
         jScrollPane4.setViewportView(tCard5);
 
         tCard3.setEditable(false);
-        tCard3.setText("TCard3");
         jScrollPane5.setViewportView(tCard3);
 
         tCard2.setEditable(false);
-        tCard2.setText("TCard2");
         jScrollPane6.setViewportView(tCard2);
 
         tCard1.setEditable(false);
-        tCard1.setText("TCard1");
         jScrollPane7.setViewportView(tCard1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -900,45 +980,206 @@ public class PokerUI extends javax.swing.JFrame {
                     .addComponent(Check, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Fold, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
-
-        pack();
+        
         counter++;
         if(counter==1)
         {
-            tCard1.setVisible(true);
-            tCard2.setVisible(true);
-            tCard3.setVisible(true);
-            
+                tCard1.setVisible(true);
+                tCard2.setVisible(true);
+                tCard3.setVisible(true);
         }
         else if(counter==2)
         {
-            tCard1.setVisible(true);
-            tCard2.setVisible(true);
-            tCard3.setVisible(true);
-            tCard4.setVisible(true);
             
+                tCard1.setVisible(true);
+                tCard2.setVisible(true);
+                tCard3.setVisible(true);
+                tCard4.setVisible(true);
         }
         else if(counter==3)
-        {
+        {       
             tCard1.setVisible(true);
             tCard2.setVisible(true);
             tCard3.setVisible(true);
             tCard4.setVisible(true);
             tCard5.setVisible(true);
-            
+            Check.setText("quit");
+            Fold.setEnabled(false); 
+            Bet.setEnabled(false);
+            Card oppCard1 = table.dealCard();
+            Card oppCard2 = table.dealCard();
+            TableCards tableCards = new TableCards(ctCard1, ctCard2, ctCard3, ctCard4, ctCard5);
+            if(checkWin.chekWin(cpCard1, cpCard2, oppCard1, oppCard2, tableCards)==true)
+            {
+                Label1.setText("Youve won: $"+table.getPot()+"\n Opponent had: "+oppCard1.card+", "+oppCard2.card);
+                bank.deposit(user, table.getPot());
+            }
+            else
+            {
+                Label1.setText("Opponent won: $"+table.getPot()+"\n Opponent had: "+oppCard1.card+", "+oppCard2.card);
+            }
         }
         else if(counter==4)
         {
-            counter = 0;
-            tCard1.setVisible(true);
-            tCard2.setVisible(true);
-            tCard3.setVisible(true);
-            tCard4.setVisible(true);
-            tCard5.setVisible(true);
-            
+            System.exit(0);
         }
+        pack();
     }
     
+    public void BetActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        int deck = Integer.parseInt(deckNum.getText());
+        table = new Table(deck, user, bank);
+        Play2.setVisible(false);
+        deckNum.setVisible(false);
+        tCard1.setVisible(false);
+        tCard2.setVisible(false);
+        tCard3.setVisible(false);
+        tCard4.setVisible(false);
+        tCard5.setVisible(false);
+        jScrollPane.setVisible(false);
+        jScrollPane2.setVisible(false);
+        jScrollPane3.setVisible(false);
+        jScrollPane4.setVisible(false);
+        jScrollPane5.setVisible(false);
+        jScrollPane6.setVisible(false);
+        jScrollPane7.setVisible(false);
+        Bet.setVisible(false);
+        
+        pCard1.setVisible(true);
+        pCard2.setVisible(true);
+        Check.setEnabled(false);
+        Fold.setEnabled(false);
+        TextField1.setVisible(true);
+        Bet2.setVisible(true);
+        
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        Title.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+        Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Title.setText("Poker Game");
+        Title.setAlignmentY(0.0F);
+
+        Label1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        Bet2.setLabel("Bet");
+        Bet2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Bet2ActionPerformed(evt);
+            }
+        });
+        Fold.setText("Fold");
+
+        Check.setLabel("Check/Match");
+
+        pCard2.setEditable(false);
+        jScrollPane.setViewportView(pCard2);
+
+        pCard1.setEditable(false);
+        jScrollPane2.setViewportView(pCard1);
+
+        tCard4.setEditable(false);
+        jScrollPane3.setViewportView(tCard4);
+
+        tCard5.setEditable(false);
+        jScrollPane4.setViewportView(tCard5);
+
+        tCard3.setEditable(false);
+        jScrollPane5.setViewportView(tCard3);
+
+        tCard2.setEditable(false);
+        jScrollPane6.setViewportView(tCard2);
+
+        tCard1.setEditable(false);
+        jScrollPane7.setViewportView(tCard1);
+
+        TextField1.setText("Bet Amount");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(TextField1))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(Check, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(Bet2, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Fold, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(103, 103, 103)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(78, 78, 78)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addComponent(Label1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Bet2, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Check, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Fold, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        pack();
+    }
+    
+    private void Bet2ActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        int bet = Integer.parseInt(TextField1.getText());        
+        table.bet(user, bank, bet*2);
+        bank.withraw(user, bet);
+        CheckActionPerformed(evt);
+        pack();
+    }
+    
+    private void FoldActionPerformed(java.awt.event.ActionEvent evt)
+    {
+        System.exit(0);
+    }
     
     /**
      * @param args the command line arguments
@@ -1001,9 +1242,11 @@ public class PokerUI extends javax.swing.JFrame {
     private javax.swing.JButton Withraw2;
     private javax.swing.JButton Play2;
     private javax.swing.JButton doneButton;
-    javax.swing.JButton Bet;
-    javax.swing.JButton Fold;
-    javax.swing.JButton Check;
+    private javax.swing.JButton Bet;
+    private javax.swing.JButton Fold;
+    private javax.swing.JButton Check;
+    private javax.swing.JButton Bet2;
+    
     
     private javax.swing.JTextField deckNum;
     private javax.swing.JTextField depositAmount;
